@@ -5,3 +5,4 @@ numpy
 basedosdados
 psycopg2-binary
 sqlalchemy
+python-dotenv

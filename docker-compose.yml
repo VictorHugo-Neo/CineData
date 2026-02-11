@@ -1,39 +1,44 @@
 version: '3.8'
 
 services:
-  db: 
+  # Banco de Dados (PostgreSQL)
+  db:
     image: postgres:15
     container_name: cinedata_db
-    restart: always 
+    restart: always
     environment:
-      POSTGRES_USER: victorhugo-neo
-      POSTGRES_PASSWORD: 123
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
       POSTGRES_DB: cinedata_imdb
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - ./sql-scripts:/docker-entrypoint-initdb.d
-  data_service:
+
+  # Serviço de Processamento de Dados (Python + Pandas)
+  data-service:
     build: ./data-service
     container_name: cinedata_python
     volumes:
       - ./data-service:/app
     ports:
       - "8000:8000"
-    evironment:
+    environment:
       - DATABASE_URL=postgresql://victorhugo-neo:123@db:5432/cinedata_imdb
-  
+
+  # Backend da Aplicação (Node.js + TypeScript)
   backend:
     build: ./backend
-    container_name: cinedata_backend
+    container_name: cinedata_node
     volumes:
       - ./backend:/app
     ports:
       - "3000:3000"
     depends_on:
       - db
-      - data-services
-  
+      - data-service
+
+  # Frontend (React + TypeScript)
   frontend:
     build: ./frontend
     container_name: cinedata_react
