@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  db: 
+    image: postgres:15
+    container_name: cinedata_db
+    restart: always 
+    environment:
+      POSTGRES_USER: victorhugo-neo
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: cinedata_imdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./sql-scripts:/docker-entrypoint-initdb.d
+  data_service:
+    build: ./data-service
+    container_name: cinedata_python
+    volumes:
+      - ./data-service:/app
+    ports:
+      - "8000:8000"
+    evironment:
+      - DATABASE_URL=postgresql://victorhugo-neo:123@db:5432/cinedata_imdb
+  
+  backend:
+    build: ./backend
+    container_name: cinedata_backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - data-services
+  
+  frontend:
+    build: ./frontend
+    container_name: cinedata_react
+    ports:
+      - "5173:5173"
+    stdin_open: true
