@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model movies {
+  id_titulo        String @id
+  titulo_original  String?
+  ano_lancamento   BigInt?
+  genero           String?
+  nota_media       Float?
+  numero_votos     BigInt?
+  genero_principal String?
+  score_ranking    Float?
+
+  @@ignore
+}
