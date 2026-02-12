@@ -3,15 +3,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only index.ts",
+    "dev": "ts-node-dev --compiler-options '{\"module\": \"CommonJS\", \"moduleResolution\": \"node\"}' --respawn --transpile-only index.ts",
     "build": "tsc",
     "start": "node dist/index.js"
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",
+    "cors": "^2.8.6",
     "express": "^4.18.2"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^4.17.17",
     "@types/node": "^20.0.0",
     "prisma": "^5.0.0",
