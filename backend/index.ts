@@ -6,7 +6,11 @@ const app = express();
 const prisma = new PrismaClient();
 const port = 3000;
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', // Origem do seu Vite
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // Função auxiliar para lidar com BigInt no JSON
