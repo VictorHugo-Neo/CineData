@@ -7,13 +7,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model movies {
-  id_titulo        String  @id
-  titulo_original  String?
-  ano_lancamento   Int?
-  genero           String?
-  nota_media       Float?
-  numero_votos     Int?
-  genero_principal String?
-  score_ranking    Float?
+  id                    String  @id
+  title                 String?
+  link                  String?
+  year                  BigInt?
+  duration              String?
+  rating_mpa            String?
+  rating_imdb           Float?
+  vote                  Float?
+  budget                Float?
+  gross_world_wide      Float?
+  gross_us_canada       Float?
+  gross_opening_weekend Float?
+  director              String?
+  writer                String?
+  star                  String?
+  genre                 String?
+  country_origin        String?
+  filming_location      String?
+  production_company    String?
+  language              String?
+  win                   BigInt?
+  nomination            BigInt?
+  oscar                 BigInt?
+  genero_principal      String?
+  score_ranking         Float?
 }

@@ -1,13 +1,14 @@
 import axios from 'axios';
 
-// Interface para garantir tipagem forte no React
 export interface Movie {
-  id_titulo: string;
-  titulo_original: string;
-  ano_lancamento: number;
-  genero: string;
-  nota_media: number;
-  genero_principal: string;
+  id: string;
+  title: string;
+  year: number;
+  rating_imdb: number;
+  director: string;
+  star: string;
+  genre: string;
+  oscar: number;
   score_ranking: number;
 }
 
