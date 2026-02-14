@@ -17,7 +17,43 @@ app.use(express.json());
 (BigInt.prototype as any).toJSON = function () {
   return Number(this);
 };
+app.get('/analytics', async (req: Request, res: Response) => {
+  const { dimension, metric } = req.query; // ex: dimension=genre, metric=oscar
 
+  try {
+    const allMovies = await prisma.movies.findMany();
+    
+    // Processamento de Dados em Memória (ideal para datasets de médio porte)
+    const stats: Record<string, number> = {};
+
+    allMovies.forEach(movie => {
+      // Lidando com categorias múltiplas (ex: "Action, Sci-Fi")
+      const keys = dimension === 'genre' 
+        ? (movie.genre?.split(', ') || ['N/A']) 
+        : [String((movie as any)[dimension as string] || 'Desconhecido')];
+
+      keys.forEach(key => {
+        const val = Number(movie[metric as keyof typeof movie] || 0);
+        
+        if (metric === 'count') {
+          stats[key] = (stats[key] || 0) + 1;
+        } else {
+          stats[key] = (stats[key] || 0) + val;
+        }
+      });
+    });
+
+    // Formata para o Recharts e ordena pelos maiores valores
+    const chartData = Object.entries(stats)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 10); // Top 10 para não poluir o gráfico
+
+    res.json(chartData);
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao processar estatísticas." });
+  }
+});
 app.get('/genres', async (req, res) => {
   try {
     const movies = await prisma.movies.findMany({ select: { genre: true } });
