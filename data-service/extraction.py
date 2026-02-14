@@ -27,7 +27,13 @@ def fetch_and_load_real_data():
     # 3. Cálculo de Score Robusto (Lógica de Negócio)
     # Ponderamos a nota pelo volume de votos (escala logarítmica) e bônus por Oscars
     df['score_ranking'] = (df['rating_imdb'] * np.log10(df['vote'] + 1)) + (df['oscar'] * 2)
-
+    # Trata colunas financeiras para garantir que sejam numéricas
+    financial_cols = ['budget', 'gross_world_wide', 'gross_us_canada', 'gross_opening_weekend']
+    for col in financial_cols:
+        if col in df.columns:
+        # Remove caracteres não numéricos se existirem e converte para float
+            df[col] = pd.to_numeric(df[col].replace('[\$,]', '', regex=True), errors='coerce').fillna(0)
+    
     print("Enviando para PostgreSQL...")
     # 'replace' garante que toda a estrutura do CSV real seja refletida no banco
     df.to_sql('movies', engine, if_exists='replace', index=False)
