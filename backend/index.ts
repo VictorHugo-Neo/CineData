@@ -17,6 +17,39 @@ app.use(express.json());
 (BigInt.prototype as any).toJSON = function () {
   return Number(this);
 };
+
+app.get('/random-movie', async (req: Request, res: Response) => {
+  const { genero } = req.query;
+
+  try {
+    // Busca os IDs dos filmes que correspondem ao gênero
+    const movies = await prisma.movies.findMany({
+      where: {
+        genre: genero ? { contains: String(genero), mode: 'insensitive' } : undefined,
+      },
+      select: { id: true }
+    });
+
+    if (movies.length === 0) {
+      return res.status(404).json({ error: "Nenhum filme encontrado para este gênero." });
+    }
+
+    // Sorteia um ID da lista
+    const randomIndex = Math.floor(Math.random() * movies.length);
+    const randomId = movies[randomIndex].id;
+
+    // Busca o filme completo
+    const movie = await prisma.movies.findUnique({
+      where: { id: randomId }
+    });
+
+    res.json(movie);
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao sortear filme." });
+  }
+});
+
+
 app.get('/analytics', async (req: Request, res: Response) => {
   const { dimension, metric } = req.query; // ex: dimension=genre, metric=oscar
 
