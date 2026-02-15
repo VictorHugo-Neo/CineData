@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Film, Clapperboard, Dices} from 'lucide-react';
+import { LayoutDashboard, Film, Clapperboard, Dices, Info } from 'lucide-react';
 
 export default function Navbar() {
   const location = useLocation();
@@ -13,7 +13,7 @@ export default function Navbar() {
           <Clapperboard className="text-red-600 group-hover:rotate-12 transition-transform" />
           <span className="text-xl font-black uppercase tracking-tighter">CineData</span>
         </Link>
-        
+
         <div className="flex gap-8 text-sm font-bold uppercase tracking-widest">
           <Link to="/" className={`${isActive('/')} hover:text-white transition-colors flex items-center gap-2`}>
             <Film size={18} /> Filmes
@@ -23,6 +23,9 @@ export default function Navbar() {
           </Link>
           <Link to="/surprise" className={`${isActive('/surprise')} hover:text-white transition-colors flex items-center gap-2`}>
             <Dices size={18} /> Surpresa
+          </Link>
+          <Link to="/about" className={`${isActive('/about')} hover:text-white transition-colors flex items-center gap-2`}>
+            <Info size={18} /> Sobre
           </Link>
         </div>
       </div>

@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Analytics from './pages/Analytics';
 import Surprise from './pages/Surprise';
+import About from './pages/About';
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/surprise" element={<Surprise />} />
+            <Route path="/about" element={<About />} /> 
           </Routes>
         </main>
       </div>
