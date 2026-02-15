@@ -100,23 +100,23 @@ app.get('/genres', async (req, res) => {
 app.get('/recommendations', async (req: Request, res: Response) => {
   try {
     const { genero } = req.query;
+    console.log("Buscando recomendações para:", genero || "Todos");
 
     const movies = await prisma.movies.findMany({
       where: {
-        genre: genero ? {
-          contains: String(genero), // Busca o gênero dentro da string completa
-          mode: 'insensitive'      // Ignora maiúsculas/minúsculas
-        } : undefined,
+        genre: genero ? { contains: String(genero), mode: 'insensitive' } : undefined,
       },
       orderBy: {
-        score_ranking: 'desc',
+        score_ranking: 'desc', // VERIFIQUE SE ESSE CAMPO EXISTE NO SCHEMA
       },
-      take: 50, // Aumentado para mostrar mais resultados do CSV real
+      take: 50,
     });
 
     res.json(movies);
-  } catch (error) {
-    res.status(500).json({ error: "Erro ao buscar dados." });
+  } catch (error: any) {
+    // ESTE LOG VAI APARECER NO DOCKER LOGS AGORA
+    console.error("❌ ERRO NO PRISMA:", error.message); 
+    res.status(500).json({ error: "Erro interno no servidor", details: error.message });
   }
 });
 

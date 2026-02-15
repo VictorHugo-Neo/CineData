@@ -150,10 +150,13 @@ export default function Analytics() {
                 }}
                 labelStyle={{ fontWeight: 'bold', color: '#f4f4f5' }}
                 itemStyle={{ color: '#f4f4f5' }}
-                formatter={(value?: number) => [
-                  isFinancial ? formatCurrency(value) : value?.toLocaleString() || '0',
-                  "Valor Acumulado"
-                ]}
+                formatter={(value: any) => {
+                  const numericValue = Number(value?? 0);
+                  return[
+                    isFinancial ? formatCurrency(numericValue) : numericValue.toLocaleString(),
+                    "Valor Acumulado"
+                  ]
+                }}
               />
               <Bar dataKey="value" radius={[0, 8, 8, 0]} barSize={32}>
                 {data.map((entry, index) => (
